@@ -16,11 +16,11 @@ ${allNews[index].description}
           inline_keyboard: [
             [
               {
-                text: `<< ${index}`,
+                text: `<< ${index == 9 ? 9 : index + 1} `,
                 callback_data: "prev",
               },
               {
-                text: `${index + 1} >>`,
+                text: `${index == 9 ? 10 : index + 2} >>`,
                 callback_data: "next",
               },
             ],
@@ -50,11 +50,10 @@ ${allNews[index].description}
         const response = await axios(API_CALL);
 
         if (response.statusText === "OK") {
-          // console.log(response.data.articles[0]);
           ctx.deleteMessage();
           let allNews = response.data.articles;
           
-          console.log(allNews);
+          // console.log(allNews);
           let index = 0;
 
           displayArticle(index, ctx, allNews);

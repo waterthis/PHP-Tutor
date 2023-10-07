@@ -5,7 +5,9 @@ const client = pexels.createClient(process.env.PEXELS_API_TOKEN);
 
 module.exports = (bot) => {
   bot.command(["picture", "Picture"], (ctx) => {
-    let message = `**PLEASE SELECT DOMAIN**`;
+    let message = `PLEASE SELECT <b>DOMAIN</b>
+
+And enter your Desired Search on <b>Inline Mode</b>`;
     ctx.reply(message, {
       reply_markup: {
         inline_keyboard: [
@@ -23,7 +25,7 @@ module.exports = (bot) => {
           ],
         ],
       },
-      parse_mode: "Markdown",
+      parse_mode: "HTML",
     });
   });
 
