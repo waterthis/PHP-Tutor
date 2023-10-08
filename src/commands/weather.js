@@ -62,7 +62,7 @@ module.exports = (bot) => {
     const latitude = ctx.message.location.latitude;
     const longitude = ctx.message.location.longitude;
 
-    const apiCall = `${process.env.WEATHER_API}current${process.env.WEATHER_API_KEY}${process.env.WEATHER_API_ENDPOINTS}${latitude},${longitude}`;
+    const apiCall = `${process.env.WEATHER_API}current${process.env.WEATHER_API_KEY}${process.env.key}${process.env.WEATHER_API_ENDPOINTS}${latitude},${longitude}`;
     ctx.replyWithChatAction("typing");
 
     axios
@@ -113,25 +113,26 @@ Wind speed of <b>${windSpeed}</b> m/s with direction of <b>${windDirection}°</b
 
     const apiCall = `${process.env.WEATHER_API}astronomy${process.env.WEATHER_API_KEY}&q=${latitude},${longitude}`;
 
-    const response = axios(apiCall).then((response) => {
-      // console.log(response.data);
+    const response = axios(apiCall)
+      .then((response) => {
+        // console.log(response.data);
 
-      ctx.deleteMessage();
+        ctx.deleteMessage();
 
-      const { name, country, localtime_epoch } = response.data.location;
-      const date = new Date(localtime_epoch * 1000);
-      const formattedDate = date.toLocaleString();
-      const {
-        sunrise,
-        sunset,
-        moonrise,
-        moonset,
-        moon_phase,
-        moon_illumination,
-      } = response.data.astronomy.astro;
+        const { name, country, localtime_epoch } = response.data.location;
+        const date = new Date(localtime_epoch * 1000);
+        const formattedDate = date.toLocaleString();
+        const {
+          sunrise,
+          sunset,
+          moonrise,
+          moonset,
+          moon_phase,
+          moon_illumination,
+        } = response.data.astronomy.astro;
 
-      ctx.reply(
-        `<b>Location</b>: ${name}, ${country}
+        ctx.reply(
+          `<b>Location</b>: ${name}, ${country}
 
 <b>Date</b>: ${formattedDate}
 
@@ -147,12 +148,15 @@ Phase of Moon is <b>${moon_phase}</b>
 
 <b>${moon_illumination}</b> percent of the moon is visible
 `,
-        { parse_mode: "HTML" }
-      );
-    }).catch((err) => {
-      console.log("Something went wrong when handlingWeatherAstronomy Request")
-      console.log(err);
-    })
+          { parse_mode: "HTML" }
+        );
+      })
+      .catch((err) => {
+        console.log(
+          "Something went wrong when handlingWeatherAstronomy Request"
+        );
+        console.log(err);
+      });
   }
 
   function handleWeatherRequest(ctx, type) {
