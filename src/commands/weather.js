@@ -62,7 +62,7 @@ module.exports = (bot) => {
     const latitude = ctx.message.location.latitude;
     const longitude = ctx.message.location.longitude;
 
-    const apiCall = `${process.env.WEATHER_API}current${process.env.WEATHER_API_KEY}${process.env.key}${process.env.WEATHER_API_ENDPOINTS}${latitude},${longitude}`;
+    const apiCall = `${process.env.WEATHER_API}current${process.env.WEATHER_API_KEY}${process.env.WEATHER_API_ENDPOINTS}${latitude},${longitude}`;
     ctx.replyWithChatAction("typing");
 
     axios
