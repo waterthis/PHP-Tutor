@@ -89,7 +89,7 @@ With a temperature of <b>${temperature}°C</b>
 Human perception (feels like <b>${feelsLike}°C</b>)
 Humidity is <b>${humidity}%</b>
 Time : ${time}(24H-format),${is_day ? "Day time" : "Night time"}
-Date : <b>${time}</b>
+Date : <b>${date}</b>
 Cloudiness is <b>${cloudiness}%</b>
 Wind speed of <b>${windSpeed}</b> m/s with direction of <b>${windDirection}°</b>(${windDirectionDesc})`;
 
