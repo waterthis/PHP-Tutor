@@ -1,5 +1,3 @@
-
-
 module.exports = {
   help_message: `
 Here are some of the commands you can use:

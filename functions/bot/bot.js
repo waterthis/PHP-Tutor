@@ -3,26 +3,29 @@ require("dotenv").config({ path: "../../.env" });
 const { Telegraf } = require("telegraf");
 const { message } = require("telegraf/filters");
 
-
 // for deployment
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-// for testing
+/**********************************
+  for local testing 
+*********************************/
 // const bot = new Telegraf(process.env.TEST_BOT_TOKEN);
 
 // start command 
 const start_command = require("../../src/commands/start")
 start_command(bot)
 
+// help command 
+const help_command = require("../../src/commands/help")
+help_command(bot)
+
 // kanye command 
-
-
+const kanye_command = require("../../src/commands/kanye")
+kanye_command(bot)
 
 bot.help((ctx) => ctx.reply("Send me a sticker"));
 bot.on(message("sticker"), (ctx) => ctx.reply("👍"));
 bot.hears("hi", (ctx) => ctx.reply("Hey there"));
-
-
 
 function start_bot() {
     try {
@@ -38,10 +41,11 @@ function start_bot() {
     }
 }
 
-// for local testing
+/**********************************
+  start bot is for local testing 
+*********************************/
+
 // start_bot()
-
-
 
 exports.handler = async (event) => {
   try {
