@@ -16,7 +16,7 @@ module.exports = (bot) => {
       [{ text: "Wocka", callback_data: "wocka" }],
     ];
     await ctx.reply("SELECT JOKE PROVIDER", {
-      reply_markup: {inline_keyboard: inline_menu},
+      reply_markup: { inline_keyboard: inline_menu },
       reply_to_message_id: ctx.message.message_id,
     });
 
@@ -27,9 +27,7 @@ module.exports = (bot) => {
       await ctx.deleteMessage();
       await ctx.reply(reddit_jokes[random_index].title);
 
-      setTimeout(async () => {
-        await ctx.reply(reddit_jokes[random_index].body);
-      }, 3000);
+      await ctx.reply(reddit_jokes[random_index].body);
     });
 
     bot.action(["stupid", "wocka"], async (ctx) => {
