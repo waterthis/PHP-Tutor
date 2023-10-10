@@ -6,10 +6,14 @@ const { message } = require("telegraf/filters");
 // for deployment
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
+
+
 /**********************************
   for local testing 
 *********************************/
 // const bot = new Telegraf(process.env.TEST_BOT_TOKEN);
+
+
 
 // start command 
 const start_command = require("../../src/commands/start")
@@ -23,9 +27,10 @@ help_command(bot)
 const kanye_command = require("../../src/commands/kanye")
 kanye_command(bot)
 
-bot.help((ctx) => ctx.reply("Send me a sticker"));
-bot.on(message("sticker"), (ctx) => ctx.reply("👍"));
-bot.hears("hi", (ctx) => ctx.reply("Hey there"));
+// joke command 
+const joke_command = require("../../src/commands/joke")
+joke_command(bot)
+
 
 function start_bot() {
     try {
