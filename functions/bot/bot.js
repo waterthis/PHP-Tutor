@@ -4,14 +4,14 @@ const { Telegraf } = require("telegraf");
 const { message } = require("telegraf/filters");
 
 // for deployment
-const bot = new Telegraf(process.env.BOT_TOKEN);
+// const bot = new Telegraf(process.env.BOT_TOKEN);
 
 
 
 /**********************************
   for local testing 
 *********************************/
-// const bot = new Telegraf(process.env.TEST_BOT_TOKEN);
+const bot = new Telegraf(process.env.TEST_BOT_TOKEN);
 
 
 
@@ -30,6 +30,10 @@ kanye_command(bot)
 // joke command 
 const joke_command = require("../../src/commands/joke")
 joke_command(bot)
+
+// picture command 
+const picture_command = require("../../src/inline/picture")
+picture_command(bot)
 
 
 function start_bot() {
@@ -50,7 +54,7 @@ function start_bot() {
   start bot is for local testing 
 *********************************/
 
-// start_bot()
+start_bot()
 
 exports.handler = async (event) => {
   try {

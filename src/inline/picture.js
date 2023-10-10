@@ -4,11 +4,11 @@ const pexels = require("pexels");
 const client = pexels.createClient(process.env.PEXELS_API_TOKEN);
 
 module.exports = (bot) => {
-  bot.command(["picture", "Picture"], (ctx) => {
+  bot.command(["picture", "Picture"], async (ctx) => {
     let message = `PLEASE SELECT <b>DOMAIN</b>
 
 And enter your Desired Search on <b>Inline Mode</b>`;
-    ctx.reply(message, {
+    await ctx.reply(message, {
       reply_markup: {
         inline_keyboard: [
           [

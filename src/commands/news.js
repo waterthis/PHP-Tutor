@@ -1,6 +1,5 @@
 const axios = require("axios");
 module.exports = (bot) => {
-
   const displayArticle = (index, ctx, allNews) => {
     ctx.reply(
       `**Title** : ${allNews[index].title}
@@ -52,7 +51,7 @@ ${allNews[index].description}
         if (response.statusText === "OK") {
           ctx.deleteMessage();
           let allNews = response.data.articles;
-          
+
           // console.log(allNews);
           let index = 0;
 
