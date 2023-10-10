@@ -4,14 +4,13 @@ const { Telegraf } = require("telegraf");
 const { message } = require("telegraf/filters");
 
 // for deployment
-// const bot = new Telegraf(process.env.BOT_TOKEN);
-
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 
 /**********************************
   for local testing 
 *********************************/
-const bot = new Telegraf(process.env.TEST_BOT_TOKEN);
+// const bot = new Telegraf(process.env.TEST_BOT_TOKEN);
 
 
 
@@ -54,7 +53,7 @@ function start_bot() {
   start bot is for local testing 
 *********************************/
 
-start_bot()
+// start_bot()
 
 exports.handler = async (event) => {
   try {
