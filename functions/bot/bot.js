@@ -30,6 +30,10 @@ kanye_command(bot)
 const joke_command = require("../../src/commands/joke")
 joke_command(bot)
 
+// news command 
+const news_command = require("../../src/commands/news")
+news_command(bot)
+
 // picture command 
 const picture_command = require("../../src/inline/picture")
 picture_command(bot)

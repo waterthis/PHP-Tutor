@@ -30,12 +30,11 @@ module.exports = (bot) => {
     });
 
     bot.action(["stupid", "wocka"], async (ctx) => {
-      await ctx.answerCbQuery();
-      // console.log(ctx.match[0]);
+      await ctx.answerCbQuery(`Selected ${ctx.match[0] === "stupid"? ("Stupid Stuff"):("Wocka")}`);
+      console.log(ctx.match[0]);
       let random_index = Math.floor(
         Math.random() * joke_providers.get(ctx.match[0]).length
       );
-
       await ctx.deleteMessage();
       await ctx.reply(joke_providers.get(ctx.match[0])[random_index].body);
     });
