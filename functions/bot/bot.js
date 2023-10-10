@@ -3,9 +3,21 @@ require("dotenv").config({ path: "../../.env" });
 const { Telegraf } = require("telegraf");
 const { message } = require("telegraf/filters");
 
+
+// for deployment
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-bot.start((ctx) => ctx.reply("Welcome"));
+// for testing
+// const bot = new Telegraf(process.env.TEST_BOT_TOKEN);
+
+// start command 
+const start_command = require("../../src/commands/start")
+start_command(bot)
+
+// kanye command 
+
+
+
 bot.help((ctx) => ctx.reply("Send me a sticker"));
 bot.on(message("sticker"), (ctx) => ctx.reply("👍"));
 bot.hears("hi", (ctx) => ctx.reply("Hey there"));
@@ -27,19 +39,19 @@ function start_bot() {
 }
 
 // for local testing
-// start_bot()
+start_bot()
 
 
 
-exports.handler = async (event) => {
-  try {
-    await bot.handleUpdate(JSON.parse(event.body));
-    return { statusCode: 200, body: "" };
-  } catch (e) {
-    console.error("error in handler:", e);
-    return {
-      statusCode: 400,
-      body: "This endpoint is meant for bot and telegram communication",
-    };
-  }
-};
+// exports.handler = async (event) => {
+//   try {
+//     await bot.handleUpdate(JSON.parse(event.body));
+//     return { statusCode: 200, body: "" };
+//   } catch (e) {
+//     console.error("error in handler:", e);
+//     return {
+//       statusCode: 400,
+//       body: "This endpoint is meant for bot and telegram communication",
+//     };
+//   }
+// };
