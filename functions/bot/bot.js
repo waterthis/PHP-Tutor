@@ -1,3 +1,4 @@
+require("dotenv")
 const { Telegraf } = require("telegraf");
 const bot = new Telegraf(process.env.BOT_TOKEN2);
 
@@ -23,3 +24,28 @@ exports.handler = async (event) => {
     };
   }
 };
+
+
+
+
+
+
+// const Telegraf = require("telegraf");
+// const express = require("express");
+// const bodyParser = require("body-parser");
+
+// const app = express();
+// app.use(bodyParser.json());
+
+
+// const bot = new Telegraf(process.env.BOT_TOKEN2);
+
+// bot.command("start", (ctx) => {
+//   ctx.reply("Hello!");
+// });
+
+// app.post("/bot", (req, res) => {
+//   bot.handleUpdate(req.body, res);
+// });
+
+// module.exports = app;
