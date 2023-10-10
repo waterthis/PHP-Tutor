@@ -1,16 +1,35 @@
-require("dotenv")
-const { Telegraf } = require("telegraf");
-const bot = new Telegraf(process.env.BOT_TOKEN2);
+require("dotenv").config({ path: "../../.env" });
 
-bot.start((ctx) => {
-  console.log("Received /start command");
-  try {
-    ctx.reply("Congrats! You've connected to Netlify!");
-  } catch (e) {
-    console.error("error in start action:", e);
-    ctx.reply("Error occured");
-  }
-});
+const { Telegraf } = require("telegraf");
+const { message } = require("telegraf/filters");
+
+const bot = new Telegraf(process.env.BOT_TOKEN);
+
+bot.start((ctx) => ctx.reply("Welcome"));
+bot.help((ctx) => ctx.reply("Send me a sticker"));
+bot.on(message("sticker"), (ctx) => ctx.reply("👍"));
+bot.hears("hi", (ctx) => ctx.reply("Hey there"));
+
+
+
+function start_bot() {
+    try {
+      console.log("Bot is running");
+      bot.launch();
+      // Enable graceful stop
+      process.once("SIGINT", () => bot.stop("SIGINT"));
+      process.once("SIGTERM", () => bot.stop("SIGTERM"));
+    } catch (error) {
+      console.log("An Error Ocurred.");
+      console.log("Restarting Bot");
+      start_bot()
+    }
+}
+
+// for local testing
+// start_bot()
+
+
 
 exports.handler = async (event) => {
   try {
@@ -24,28 +43,3 @@ exports.handler = async (event) => {
     };
   }
 };
-
-
-
-
-
-
-// const Telegraf = require("telegraf");
-// const express = require("express");
-// const bodyParser = require("body-parser");
-
-// const app = express();
-// app.use(bodyParser.json());
-
-
-// const bot = new Telegraf(process.env.BOT_TOKEN2);
-
-// bot.command("start", (ctx) => {
-//   ctx.reply("Hello!");
-// });
-
-// app.post("/bot", (req, res) => {
-//   bot.handleUpdate(req.body, res);
-// });
-
-// module.exports = app;
