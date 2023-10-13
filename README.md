@@ -1,7 +1,3 @@
-fix news bug
-index is not changing
-
-
 ## To commit 
 Comment local testing bot 
 comment start_bot()
@@ -14,3 +10,8 @@ comment for deployment
 uncomment test_bot
 uncomment start_bot
 run bot
+
+## To Do
+
+- [ ] fix news bug index is not changing
+- [ ] add translate inline command
