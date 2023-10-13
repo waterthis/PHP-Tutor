@@ -1,7 +1,16 @@
-use more inline buttons
+fix news bug
+index is not changing
 
-use inline query for images
 
-change jokeapi
+## To commit 
+Comment local testing bot 
+comment start_bot()
+stop running
+uncomment deployment bot
 
-change to better weather api
+
+## To code
+comment for deployment 
+uncomment test_bot
+uncomment start_bot
+run bot

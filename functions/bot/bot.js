@@ -1,18 +1,19 @@
 require("dotenv").config({ path: "../../.env" });
 
-const { Telegraf } = require("telegraf");
+const { Telegraf, session } = require("telegraf");
 const { message } = require("telegraf/filters");
 
 // for deployment
 const bot = new Telegraf(process.env.BOT_TOKEN);
-
 
 /**********************************
   for local testing 
 *********************************/
 // const bot = new Telegraf(process.env.TEST_BOT_TOKEN);
 
+bot.use(session({ defaultSession: () => ({}) }));
 
+// console.log(bot.session);
 
 // start command 
 const start_command = require("../../src/commands/start")
@@ -33,6 +34,10 @@ joke_command(bot)
 // news command 
 const news_command = require("../../src/commands/news")
 news_command(bot)
+
+// weather command 
+const weather_command = require("../../src/commands/weather")
+weather_command(bot)
 
 // picture command 
 const picture_command = require("../../src/inline/picture")

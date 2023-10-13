@@ -2,6 +2,7 @@ const axios = require("axios");
 
 module.exports = (bot) => {
   // function to display indicated article
+  let allNews = []
   const displayArticle = async (index, ctx, allNews) => {
     const the_date = (allNews[index].publishedAt.split("T")[0]);
     const the_time = (allNews[index].publishedAt.split("T")[1]).slice(0,-4);
@@ -54,12 +55,12 @@ ${allNews[index].description? (allNews[index].description):("*NEWS HAS NO DESCRI
 
         if (response.statusText === "OK") {
           await ctx.deleteMessage();
-          let allNews = response.data.articles;
+          allNews = response.data.articles;
 
           // console.log(allNews);
           let index = 0;
 
-          displayArticle(index, ctx, allNews);
+          displayArticle(0, ctx, allNews);
 
           bot.action(["prev", "next"], async (ctx) => {
             await ctx.deleteMessage();
@@ -69,7 +70,6 @@ ${allNews[index].description? (allNews[index].description):("*NEWS HAS NO DESCRI
             } else if (ctx.match[0] === "next") {
               index = Math.min(index + 1, allNews.length - 1);
             }
-
             displayArticle(index, ctx, allNews);
           });
         } else {

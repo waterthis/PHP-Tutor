@@ -1,23 +1,40 @@
 const axios = require("axios");
-const session = require("telegraf/session");
 
 module.exports = (bot) => {
-  bot.use(session());
+  /**********************************
+  LOCATION REQUEST
+*********************************/
+  async function handleWeatherRequest(ctx, type) {
+    await ctx.answerCbQuery();
+    await ctx.deleteMessage();
 
-  function handleFocastRequest(ctx) {
+    let message = `Please share your location and
+Make sure location is <b>ON</b>
+Sharing location may take time`;
+    await ctx.reply(message, {
+      parse_mode: "HTML",
+      reply_markup: {
+        keyboard: [[{ text: "Share Location", request_location: true }]],
+        one_time_keyboard: true,
+      },
+    });
+    ctx.session.type = type;
+  }
+
+  /**********************************
+  FORECAST REQUEST HANDLER
+*********************************/
+
+  async function handleFocastRequest(ctx) {
     const latitude = ctx.message.location.latitude;
     const longitude = ctx.message.location.longitude;
 
     const apiCall = `${process.env.WEATHER_API}forecast${process.env.WEATHER_API_KEY}&q=${latitude},${longitude}`;
 
-    // console.log(apiCall);
-
-    // Show typing on top of chat
-    ctx.replyWithChatAction("typing");
+    await ctx.sendChatAction("typing");
 
     axios(apiCall)
-      .then((response) => {
-        // console.log(response.data.forecast.forecastday[0]);
+      .then(async (response) => {
         let tomorrow = response.data.forecast.forecastday[0].date;
         let hours = response.data.forecast.forecastday[0].hour;
         let {
@@ -31,9 +48,6 @@ module.exports = (bot) => {
           condition,
           uv,
         } = response.data.forecast.forecastday[0].day;
-        // console.log(tomorrow);
-        // console.log(condition);
-        // console.log(hours);
 
         const message = `The average weather condition for ${tomorrow} is <b>${condition.text}</b>
 
@@ -46,7 +60,7 @@ module.exports = (bot) => {
 <b>Maximum Wind Speed</b>: ${maxwind_mph} mph
 <b>UV Index</b> : ${uv}`;
 
-        ctx.reply(message, {
+        await ctx.reply(message, {
           reply_markup: { remove_keyboard: true },
           parse_mode: "HTML",
         });
@@ -58,19 +72,20 @@ module.exports = (bot) => {
         console.log(err);
       });
   }
-  function handleCurrentRequest(ctx) {
+
+  /**********************************
+  CURRENT REQUEST HANDLER
+*********************************/
+  async function handleCurrentRequest(ctx) {
     const latitude = ctx.message.location.latitude;
     const longitude = ctx.message.location.longitude;
 
     const apiCall = `${process.env.WEATHER_API}current${process.env.WEATHER_API_KEY}${process.env.WEATHER_API_ENDPOINTS}${latitude},${longitude}`;
-    ctx.replyWithChatAction("typing");
+    await ctx.sendChatAction("typing");
 
     axios
       .get(apiCall)
-      .then((response) => {
-        // console.log(response);
-        // console.log(response.data);
-
+      .then(async (response) => {
         const { name, country } = response.data.location;
         const time = response.data.location.localtime.split(" ")[1];
         const date = response.data.location.localtime.split(" ")[0];
@@ -93,7 +108,7 @@ Date : <b>${date}</b>
 Cloudiness is <b>${cloudiness}%</b>
 Wind speed of <b>${windSpeed}</b> m/s with direction of <b>${windDirection}°</b>(${windDirectionDesc})`;
 
-        ctx.reply(message, {
+        await ctx.reply(message, {
           reply_markup: { remove_keyboard: true },
           parse_mode: "HTML",
         });
@@ -106,18 +121,20 @@ Wind speed of <b>${windSpeed}</b> m/s with direction of <b>${windDirection}°</b
       });
   }
 
-  function handleAstronomyRequest(ctx) {
-    // console.log("Location Recieved");
+  /**********************************
+  ASTRONOMY REQUEST HANDLER
+*********************************/
+  async function handleAstronomyRequest(ctx) {
     const latitude = ctx.message.location.latitude;
     const longitude = ctx.message.location.longitude;
 
     const apiCall = `${process.env.WEATHER_API}astronomy${process.env.WEATHER_API_KEY}&q=${latitude},${longitude}`;
 
     const response = axios(apiCall)
-      .then((response) => {
+      .then(async (response) => {
         // console.log(response.data);
 
-        ctx.deleteMessage();
+        await ctx.deleteMessage();
 
         const { name, country, localtime_epoch } = response.data.location;
         const date = new Date(localtime_epoch * 1000);
@@ -131,7 +148,7 @@ Wind speed of <b>${windSpeed}</b> m/s with direction of <b>${windDirection}°</b
           moon_illumination,
         } = response.data.astronomy.astro;
 
-        ctx.reply(
+        await ctx.reply(
           `<b>Location</b>: ${name}, ${country}
 
 <b>Date</b>: ${formattedDate}
@@ -159,26 +176,13 @@ Phase of Moon is <b>${moon_phase}</b>
       });
   }
 
-  function handleWeatherRequest(ctx, type) {
-    ctx.answerCbQuery();
-    ctx.deleteMessage();
+  /**********************************
+  WEATHER COMMAND HANDLER
+*********************************/
+  bot.command(["weather", "Weather"], async (ctx) => {
+    // console.log(bot.session);
 
-    let message = `Please share your location and
-Make sure location is <b>ON</b>
-Sharing location may take time`;
-    ctx.reply(message, {
-      parse_mode: "HTML",
-      reply_markup: {
-        keyboard: [[{ text: "Share Location", request_location: true }]],
-        one_time_keyboard: true,
-      },
-    });
-
-    ctx.session.type = type;
-  }
-  bot.command(["weather", "Weather"], (ctx) => {
-    // console.log(ctx.state.type);
-    ctx.reply("PLEASE SELECT SERVICE", {
+    await ctx.reply("PLEASE SELECT SERVICE", {
       reply_markup: {
         inline_keyboard: [
           [{ text: "Forecast", callback_data: "weather_api_forecast" }],
@@ -194,34 +198,40 @@ Sharing location may take time`;
     });
   });
 
-  bot.action("weather_api_astro", (ctx, next) => {
-    handleWeatherRequest(ctx, "astronomy");
+  /**********************************
+  BUTTON HANDLERS
+*********************************/
+
+  bot.action("weather_api_astro", async (ctx, next) => {
+    await handleWeatherRequest(ctx, "astronomy");
   });
 
-  bot.action("weather_api_forecast", (ctx, next) => {
-    handleWeatherRequest(ctx, "forecast");
+  bot.action("weather_api_forecast", async (ctx, next) => {
+    await handleWeatherRequest(ctx, "forecast");
   });
-  bot.action("weather_api_current", (ctx) => {
-    handleWeatherRequest(ctx, "current");
+  bot.action("weather_api_current", async (ctx) => {
+    await handleWeatherRequest(ctx, "current");
   });
+
+  /**********************************
+ LOCATION DATA HANDLER
+*********************************/
 
   bot.on("location", async (ctx) => {
-    // console.log(ctx.session.type);
-
-    ctx.replyWithChatAction("typing");
+    await ctx.sendChatAction("typing");
 
     switch (ctx.session.type) {
       case "forecast":
-        handleFocastRequest(ctx);
+        await handleFocastRequest(ctx);
         break;
       case "current":
-        handleCurrentRequest(ctx);
+        await handleCurrentRequest(ctx);
         break;
       case "astronomy":
-        handleAstronomyRequest(ctx);
+        await handleAstronomyRequest(ctx);
         break;
       default:
-        ctx.reply("Something Went Wrong, Try Again");
+        await ctx.reply("Something Went Wrong, Try Again");
         return;
     }
   });
