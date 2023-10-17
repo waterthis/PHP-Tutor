@@ -64,6 +64,7 @@ function start_bot() {
 
 // start_bot()
 
+
 exports.handler = async (event) => {
   try {
     await bot.handleUpdate(JSON.parse(event.body));
